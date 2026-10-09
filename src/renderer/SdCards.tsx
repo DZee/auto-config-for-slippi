@@ -25,6 +25,7 @@ function SdCardContent({
   sdCard: SdCard;
   forwarderVersion: string;
   slippiNintendontVersion: string;
+  slippiConsoleNickname: string;
   openErrorMessage: (message: string) => void;
   refresh: () => Promise<void>;
 }) {
@@ -56,6 +57,12 @@ function SdCardContent({
         {sdCard.slippiNintendontVersion
           ? `version: ${sdCard.slippiNintendontVersion}`
           : 'not found'}
+      </Typography>
+      <Typography variant="caption" lineHeight="20px">
+        Console nickname
+        {sdCard.slippiConsoleNickname
+          ? `: ${sdCard.slippiConsoleNickname}`
+          : ' not found'}
       </Typography>
       {copyingIso && (
         <LinearProgress
@@ -143,6 +150,7 @@ function SdCardEl({
   sdCard,
   forwarderVersion,
   slippiNintendontVersion,
+  slippiConsoleNickname,
   openErrorMessage,
   refresh,
   removeSdCard,
@@ -151,6 +159,7 @@ function SdCardEl({
   sdCard: SdCard;
   forwarderVersion: string;
   slippiNintendontVersion: string;
+  slippiConsoleNickname: string;
   openErrorMessage: (message: string) => void;
   refresh: () => Promise<void>;
   removeSdCard: () => void;
@@ -195,6 +204,7 @@ function SdCardEl({
         sdCard={sdCard}
         forwarderVersion={forwarderVersion}
         slippiNintendontVersion={slippiNintendontVersion}
+        slippiConsoleNickname={slippiConsoleNickname}
         openErrorMessage={openErrorMessage}
         refresh={refresh}
       />
@@ -204,9 +214,11 @@ function SdCardEl({
 
 export default function SdCards({
   slippiNintendontVersion,
+  slippiConsoleNickname,
   openErrorMessage,
 }: {
   slippiNintendontVersion: string;
+  slippiConsoleNickname: string;
   openErrorMessage: (message: string) => void;
 }) {
   const [sdCards, setSdCards] = useState<SdCard[]>([]);
@@ -297,6 +309,7 @@ export default function SdCards({
             sdCard={sdCards[0]}
             forwarderVersion={forwarderVersion}
             slippiNintendontVersion={slippiNintendontVersion}
+            slippiConsoleNickname={slippiConsoleNickname}
             openErrorMessage={openErrorMessage}
             refresh={refresh}
           />
@@ -309,6 +322,7 @@ export default function SdCards({
           sdCard={sdCard}
           forwarderVersion={forwarderVersion}
           slippiNintendontVersion={slippiNintendontVersion}
+          slippiConsoleNickname={slippiConsoleNickname}
           openErrorMessage={openErrorMessage}
           refresh={refresh}
           removeSdCard={() => {

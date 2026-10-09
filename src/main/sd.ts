@@ -36,6 +36,7 @@ async function getSdCard(
   let reason = '';
   let forwarderVersion = '';
   let slippiNintendontVersion = '';
+  let slippiConsoleNickname = '';
   let validIsoPath = '';
   if (!removableDrive.readonly) {
     try {
@@ -100,6 +101,22 @@ async function getSdCard(
       } catch {
         // just catch
       }
+
+      const slippiConsoleNicknamePath = path.join(
+        removableDrive.path,
+        'slippi_console.dat',
+      );
+      try {
+        // eslint-disable-next-line prettier/prettier
+        const slippiConsoleNicknameBuffer = await readFile(slippiConsoleNicknamePath);
+
+
+        // eslint-disable-next-line prettier/prettier
+        slippiConsoleNickname = slippiConsoleNicknameBuffer.toString('ascii', 4);
+
+      } catch {
+        // just catch
+      }
     } catch (e: unknown) {
       reason = e instanceof Error ? e.message : JSON.stringify(e ?? 'Unknown');
     }
@@ -112,6 +129,7 @@ async function getSdCard(
     reason,
     forwarderVersion,
     slippiNintendontVersion,
+    slippiConsoleNickname,
     validIsoPath,
   };
 }
