@@ -25,6 +25,7 @@ export default function App() {
   const [isoPath, setIsoPath] = useState('');
   const [slippiNintendontPath, setSlippiNintendontPath] = useState('');
   const [slippiNintendontVersion, setSlippiNintendontVersion] = useState('');
+  const [slippiConsoleNickname, setSlippiConsoleNickname] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -33,9 +34,12 @@ export default function App() {
         window.electron.getSlippiNintendontPath();
       const slippiNintendontVersionPromise =
         window.electron.getSlippiNintendontVersion();
+      const slippiConsoleNicknamePromise =
+        window.electron.getSlippiConsoleNickname();
       setIsoPath(await isoPathPromise);
       setSlippiNintendontPath(await slippiNintendontPathPromise);
       setSlippiNintendontVersion(await slippiNintendontVersionPromise);
+      setSlippiConsoleNickname(await slippiConsoleNicknamePromise);
     })();
   }, []);
 
@@ -117,6 +121,7 @@ export default function App() {
       <ConfigEl />
       <SdCards
         slippiNintendontVersion={slippiNintendontVersion}
+        slippiConsoleNickname={slippiConsoleNickname}
         openErrorMessage={openErrorMessage}
       />
       <Version />

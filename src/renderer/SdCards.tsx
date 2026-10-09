@@ -125,6 +125,7 @@ function SdCardContent({
             setWriting(true);
             try {
               await window.electron.writeConfig(sdCard);
+              await window.electron.writeSlippiConsoleNickname(sdCard);
               setWrote(true);
               setTimeout(() => {
                 setWrote(false);

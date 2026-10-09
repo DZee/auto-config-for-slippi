@@ -13,6 +13,7 @@ import {
   Select,
   Stack,
   Switch,
+  TextField,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -480,6 +481,30 @@ export default function ConfigEl() {
                     <MenuItem value={Video.AUTO}>Auto</MenuItem>
                     <MenuItem value={Video.PAL60}>Force PAL60</MenuItem>
                   </Select>
+                </FormControl>
+              </ListItem>
+              <ListItem disablePadding>
+                <FormControl
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                  }}
+                >
+                  <Typography id="nickname-label">Nickname</Typography>
+                  <TextField
+                    size="small"
+                    aria-labelledby="nickname-label"
+                    margin="dense"
+                    slotProps={{ htmlInput: { maxLength: '32' } }}
+                    onChange={async (ev) => {
+                      await window.electron.setSlippiConsoleNickname(
+                        ev.target.value,
+                      );
+                    }}
+                  />
                 </FormControl>
               </ListItem>
             </List>

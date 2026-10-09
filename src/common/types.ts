@@ -4,6 +4,7 @@ export type SdCard = {
   forwarderVersion: string;
   slippiNintendontVersion: string;
   slippiConsoleNickname: string;
+  consoleRtcBias: number;
   validIsoPath: string;
 };
 

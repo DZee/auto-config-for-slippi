@@ -37,6 +37,7 @@ async function getSdCard(
   let forwarderVersion = '';
   let slippiNintendontVersion = '';
   let slippiConsoleNickname = '';
+  let consoleRtcBias = 0x00000000;
   let validIsoPath = '';
   if (!removableDrive.readonly) {
     try {
@@ -107,11 +108,11 @@ async function getSdCard(
         'slippi_console.dat',
       );
       try {
-        // eslint-disable-next-line prettier/prettier
-        const slippiConsoleNicknameBuffer = await readFile(slippiConsoleNicknamePath);
+        const slippiConsoleNicknameBuffer = await readFile(
+          slippiConsoleNicknamePath,
+        );
 
-
-        // eslint-disable-next-line prettier/prettier
+        consoleRtcBias = slippiConsoleNicknameBuffer.readUint32BE(0);
         slippiConsoleNickname = slippiConsoleNicknameBuffer.toString('ascii', 4);
 
       } catch {
@@ -130,6 +131,7 @@ async function getSdCard(
     forwarderVersion,
     slippiNintendontVersion,
     slippiConsoleNickname,
+    consoleRtcBias,
     validIsoPath,
   };
 }
@@ -290,4 +292,25 @@ export async function writeNincfg(
       });
     }
   }
+}
+
+export async function writeSlippiConsoleNickname(
+  sdCard: SdCard,
+  slippiConsoleNickname: string,
+) {
+  // create buffer
+  const buffer = Buffer.alloc(36);
+
+  // rtcBias *should* be an int32 representing the difference in time between RTC clock and local time in seconds.
+  // Knowing the true state of the Wii RTC is impossible without doing this on-console.
+  buffer.writeUint32BE(
+    sdCard.consoleRtcBias ? sdCard.consoleRtcBias : 0x0000000,
+    0,
+  );
+
+  // 32-byte, user-configurable nickname for this console
+  buffer.write(slippiConsoleNickname, 4, 'ascii');
+
+  // write to slippi_console.dat
+  await writeFile(path.join(sdCard.key, 'slippi_console.dat'), buffer);
 }

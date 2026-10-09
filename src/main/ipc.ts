@@ -11,7 +11,7 @@ import { createReadStream, createWriteStream, WriteStream } from 'fs';
 import path from 'path';
 import { copyFile, mkdir, readFile, stat } from 'fs/promises';
 import { XMLParser } from 'fast-xml-parser';
-import getSdCards, { writeNincfg } from './sd';
+import getSdCards, { writeNincfg, writeSlippiConsoleNickname } from './sd';
 import isValidISO from './iso';
 import eject from './eject';
 import { Config, SdCard, Video } from '../common/types';
@@ -47,6 +47,7 @@ export default async function setupIPC(mainWindow: BrowserWindow) {
     codePath: string;
     config: Config;
     isoPath: string;
+    slippiConsoleNickname: string;
   }>();
 
   let isoPath = store.get('isoPath', '');
@@ -148,6 +149,18 @@ export default async function setupIPC(mainWindow: BrowserWindow) {
     (event: IpcMainInvokeEvent, newConfig: Config) => {
       config = newConfig;
       store.set('config', config);
+    },
+  );
+
+  let slippiConsoleNickname = store.get('slippiConsoleNickname', '');
+  ipcMain.removeAllListeners('getSlippiConsoleNickname');
+  ipcMain.handle('getSlippiConsoleNickname', () => slippiConsoleNickname);
+  ipcMain.removeAllListeners('setSlippiConsoleNickname');
+  ipcMain.handle(
+    'setSlippiConsoleNickname',
+    (event: IpcMainInvokeEvent, newSlippiConsoleNickname: string) => {
+      slippiConsoleNickname = newSlippiConsoleNickname;
+      store.set('slippiConsoleNickname', newSlippiConsoleNickname);
     },
   );
 
@@ -290,6 +303,14 @@ export default async function setupIPC(mainWindow: BrowserWindow) {
     'writeConfig',
     async (event: IpcMainInvokeEvent, sdCard: SdCard) => {
       await writeNincfg(sdCard, config, codePath);
+    },
+  );
+
+  ipcMain.removeAllListeners('writeSlippiConsoleNickname');
+  ipcMain.handle(
+    'writeSlippiConsoleNickname',
+    async (event: IpcMainInvokeEvent, sdCard: SdCard) => {
+      await writeSlippiConsoleNickname(sdCard, slippiConsoleNickname);
     },
   );
 

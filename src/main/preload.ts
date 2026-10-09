@@ -16,17 +16,23 @@ const electronHandler = {
   getConfig: (): Promise<Config> => ipcRenderer.invoke('getConfig'),
   setConfig: (config: Config): Promise<void> =>
     ipcRenderer.invoke('setConfig', config),
+  setSlippiConsoleNickname: (slippiConsoleNickname: string): Promise<void> =>
+    ipcRenderer.invoke('setSlippiConsoleNickname', slippiConsoleNickname),
   getSdCards: (): Promise<SdCard[]> => ipcRenderer.invoke('getSdCards'),
   getForwarderVersion: (): Promise<string> =>
     ipcRenderer.invoke('getForwarderVersion'),
   getSlippiNintendontVersion: (): Promise<string> =>
     ipcRenderer.invoke('getSlippiNintendontVersion'),
+  getSlippiConsoleNickname: (): Promise<string> =>
+    ipcRenderer.invoke('getSlippiConsoleNickname'),
   copyIso: (sdCard: SdCard): Promise<void> =>
     ipcRenderer.invoke('copyIso', sdCard),
   copyApps: (sdCard: SdCard): Promise<void> =>
     ipcRenderer.invoke('copyApps', sdCard),
   writeConfig: (sdCard: SdCard): Promise<void> =>
     ipcRenderer.invoke('writeConfig', sdCard),
+  writeSlippiConsoleNickname: (sdCard: SdCard): Promise<void> =>
+    ipcRenderer.invoke('writeSlippiConsoleNickname', sdCard),
   ejectSdCard: (key: string): Promise<void> =>
     ipcRenderer.invoke('ejectSdCard', key),
   getVersion: (): Promise<string> => ipcRenderer.invoke('getVersion'),
